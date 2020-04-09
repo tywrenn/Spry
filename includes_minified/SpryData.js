@@ -254,8 +254,8 @@ d.style.backgroundColor=bgColor;d.innerHTML=str;Spry.Debug.debugWindow.appendChi
 {rootNode=rootNode?Spry.$(rootNode):document.body;var lastRegionFound=null;var regions=Spry.Utils.getNodesByFunc(rootNode,function(node)
 {try
 {if(node.nodeType!=1)
-return false;var attrName="spry:region";var attr=node.attributes.getNamedItem(attrName);if(!attr)
-{attrName="spry:detailregion";attr=node.attributes.getNamedItem(attrName);}
+return false;var attrName="data-spry-region";var attr=node.attributes.getNamedItem(attrName);if(!attr)
+{attrName="data-spry-detailregion";attr=node.attributes.getNamedItem(attrName);}
 if(attr)
 {if(lastRegionFound)
 {var parent=node.parentNode;while(parent)
@@ -270,16 +270,16 @@ else
 Spry.Debug.reportError(attrName+" attributes require one or more data set names as values!");}}
 catch(e){}
 return false;});var name,dataSets,i;var newRegions=[];for(i=0;i<regions.length;i++)
-{var rgn=regions[i];var isDetailRegion=false;name=rgn.attributes.getNamedItem("id").value;attr=rgn.attributes.getNamedItem("spry:region");if(!attr)
-{attr=rgn.attributes.getNamedItem("spry:detailregion");isDetailRegion=true;}
+{var rgn=regions[i];var isDetailRegion=false;name=rgn.attributes.getNamedItem("id").value;attr=rgn.attributes.getNamedItem("data-spry-region");if(!attr)
+{attr=rgn.attributes.getNamedItem("data-spry-detailregion");isDetailRegion=true;}
 if(!attr.value)
-{Spry.Debug.reportError("spry:region and spry:detailregion attributes require one or more data set names as values!");continue;}
+{Spry.Debug.reportError("data-spry-region and data-spry-detailregion attributes require one or more data set names as values!");continue;}
 rgn.attributes.removeNamedItem(attr.nodeName);Spry.Utils.removeClassName(rgn,Spry.Data.Region.hiddenRegionClassName);dataSets=Spry.Data.Region.strToDataSetsArray(attr.value);if(!dataSets.length)
-{Spry.Debug.reportError("spry:region or spry:detailregion attribute has no data set!");continue;}
-var hasBehaviorAttributes=false;var hasSpryContent=false;var dataStr="";var parent=null;var regionStates={};var regionStateMap={};attr=rgn.attributes.getNamedItem("spry:readystate");if(attr&&attr.value)
-regionStateMap["ready"]=attr.value;attr=rgn.attributes.getNamedItem("spry:errorstate");if(attr&&attr.value)
-regionStateMap["error"]=attr.value;attr=rgn.attributes.getNamedItem("spry:loadingstate");if(attr&&attr.value)
-regionStateMap["loading"]=attr.value;attr=rgn.attributes.getNamedItem("spry:expiredstate");if(attr&&attr.value)
+{Spry.Debug.reportError("data-spry-region or data-spry-detailregion attribute has no data set!");continue;}
+var hasBehaviorAttributes=false;var hasSpryContent=false;var dataStr="";var parent=null;var regionStates={};var regionStateMap={};attr=rgn.attributes.getNamedItem("data-spry-readystate");if(attr&&attr.value)
+regionStateMap["ready"]=attr.value;attr=rgn.attributes.getNamedItem("data-spry-errorstate");if(attr&&attr.value)
+regionStateMap["error"]=attr.value;attr=rgn.attributes.getNamedItem("data-spry-loadingstate");if(attr&&attr.value)
+regionStateMap["loading"]=attr.value;attr=rgn.attributes.getNamedItem("data-spry-expiredstate");if(attr&&attr.value)
 regionStateMap["expired"]=attr.value;var piRegions=Spry.Utils.getNodesByFunc(rgn,function(node)
 {try
 {if(node.nodeType==1)
@@ -293,7 +293,7 @@ node.appendChild(cComment);else
 node.insertBefore(cComment,lastEndComment);lastEndComment=cComment;}
 else
 {var parent=node.parentNode;parent.insertBefore(document.createComment(openTag),node);parent.insertBefore(document.createComment(closeTag),node.nextSibling);}
-if(piName=="spry:state")
+if(piName=="data-spry-state")
 regionStates[attr.value]=true;node.removeAttribute(piName);}
 if(Spry.Data.Region.enableBehaviorAttributes)
 {var bAttrs=Spry.Data.Region.behaviorAttrs;for(var behaviorAttrName in bAttrs)
@@ -744,42 +744,42 @@ this.setState("expired");Spry.Data.Region.notifyObservers("onExpired",this);};Sp
 {if(this.isDetailRegion)
 this.updateContent();};Spry.Data.Region.prototype.onPostSort=function(dataSet,data)
 {this.updateContent();};Spry.Data.Region.prototype.onDataChanged=function(dataSet,data)
-{this.updateContent();};Spry.Data.Region.enableBehaviorAttributes=true;Spry.Data.Region.behaviorAttrs={};Spry.Data.Region.behaviorAttrs["spry:select"]={attach:function(rgn,node,value)
-{var selectGroupName=null;try{selectGroupName=node.attributes.getNamedItem("spry:selectgroup").value;}catch(e){}
+{this.updateContent();};Spry.Data.Region.enableBehaviorAttributes=true;Spry.Data.Region.behaviorAttrs={};Spry.Data.Region.behaviorAttrs["data-spry-select"]={attach:function(rgn,node,value)
+{var selectGroupName=null;try{selectGroupName=node.attributes.getNamedItem("data-spry-selectgroup").value;}catch(e){}
 if(!selectGroupName)
-selectGroupName="default";Spry.Utils.addEventListener(node,"click",function(event){Spry.Utils.SelectionManager.select(selectGroupName,node,value);},false);if(node.attributes.getNamedItem("spry:selected"))
-Spry.Utils.SelectionManager.select(selectGroupName,node,value);}};Spry.Data.Region.behaviorAttrs["spry:hover"]={attach:function(rgn,node,value)
+selectGroupName="default";Spry.Utils.addEventListener(node,"click",function(event){Spry.Utils.SelectionManager.select(selectGroupName,node,value);},false);if(node.attributes.getNamedItem("data-spry-selected"))
+Spry.Utils.SelectionManager.select(selectGroupName,node,value);}};Spry.Data.Region.behaviorAttrs["data-spry-hover"]={attach:function(rgn,node,value)
 {Spry.Utils.addEventListener(node,"mouseover",function(event){Spry.Utils.addClassName(node,value);},false);Spry.Utils.addEventListener(node,"mouseout",function(event){Spry.Utils.removeClassName(node,value);},false);}};Spry.Data.Region.setUpRowNumberForEvenOddAttr=function(node,attr,value,rowNumAttrName)
 {if(!value)
 {Spry.Debug.showError("The "+attr+" attribute requires a CSS class name as its value!");node.attributes.removeNamedItem(attr);return;}
 var dsName="";var valArr=value.split(/\s/);if(valArr.length>1)
 {dsName=valArr[0];node.setAttribute(attr,valArr[1]);}
-node.setAttribute(rowNumAttrName,"{"+(dsName?(dsName+"::"):"")+"ds_RowNumber}");};Spry.Data.Region.behaviorAttrs["spry:even"]={setup:function(node,value)
-{Spry.Data.Region.setUpRowNumberForEvenOddAttr(node,"spry:even",value,"spryevenrownumber");},attach:function(rgn,node,value)
+node.setAttribute(rowNumAttrName,"{"+(dsName?(dsName+"::"):"")+"ds_RowNumber}");};Spry.Data.Region.behaviorAttrs["data-spry-even"]={setup:function(node,value)
+{Spry.Data.Region.setUpRowNumberForEvenOddAttr(node,"data-spry-even",value,"spryevenrownumber");},attach:function(rgn,node,value)
 {if(value)
 {rowNumAttr=node.attributes.getNamedItem("spryevenrownumber");if(rowNumAttr&&rowNumAttr.value)
 {var rowNum=parseInt(rowNumAttr.value);if(rowNum%2)
 Spry.Utils.addClassName(node,value);}}
-node.removeAttribute("spry:even");node.removeAttribute("spryevenrownumber");}};Spry.Data.Region.behaviorAttrs["spry:odd"]={setup:function(node,value)
-{Spry.Data.Region.setUpRowNumberForEvenOddAttr(node,"spry:odd",value,"spryoddrownumber");},attach:function(rgn,node,value)
+node.removeAttribute("data-spry-even");node.removeAttribute("spryevenrownumber");}};Spry.Data.Region.behaviorAttrs["data-spry-odd"]={setup:function(node,value)
+{Spry.Data.Region.setUpRowNumberForEvenOddAttr(node,"data-spry-odd",value,"spryoddrownumber");},attach:function(rgn,node,value)
 {if(value)
 {rowNumAttr=node.attributes.getNamedItem("spryoddrownumber");if(rowNumAttr&&rowNumAttr.value)
 {var rowNum=parseInt(rowNumAttr.value);if(rowNum%2==0)
 Spry.Utils.addClassName(node,value);}}
-node.removeAttribute("spry:odd");node.removeAttribute("spryoddrownumber");}};Spry.Data.Region.setRowAttrClickHandler=function(node,dsName,rowAttr,funcName)
+node.removeAttribute("data-spry-odd");node.removeAttribute("spryoddrownumber");}};Spry.Data.Region.setRowAttrClickHandler=function(node,dsName,rowAttr,funcName)
 {if(dsName)
 {var ds=Spry.Data.getDataSetByName(dsName);if(ds)
 {rowIDAttr=node.attributes.getNamedItem(rowAttr);if(rowIDAttr)
 {var rowAttrVal=rowIDAttr.value;if(rowAttrVal)
-Spry.Utils.addEventListener(node,"click",function(event){ds[funcName](rowAttrVal);},false);}}}};Spry.Data.Region.behaviorAttrs["spry:setrow"]={setup:function(node,value)
+Spry.Utils.addEventListener(node,"click",function(event){ds[funcName](rowAttrVal);},false);}}}};Spry.Data.Region.behaviorAttrs["data-spry-setrow"]={setup:function(node,value)
 {if(!value)
-{Spry.Debug.reportError("The spry:setrow attribute requires a data set name as its value!");node.removeAttribute("spry:setrow");return;}
+{Spry.Debug.reportError("The data-spry-setrow attribute requires a data set name as its value!");node.removeAttribute("data-spry-setrow");return;}
 node.setAttribute("spryrowid","{"+value+"::ds_RowID}");},attach:function(rgn,node,value)
-{Spry.Data.Region.setRowAttrClickHandler(node,value,"spryrowid","setCurrentRow");node.removeAttribute("spry:setrow");node.removeAttribute("spryrowid");}};Spry.Data.Region.behaviorAttrs["spry:setrownumber"]={setup:function(node,value)
+{Spry.Data.Region.setRowAttrClickHandler(node,value,"spryrowid","setCurrentRow");node.removeAttribute("data-spry-setrow");node.removeAttribute("spryrowid");}};Spry.Data.Region.behaviorAttrs["data-spry-setrownumber"]={setup:function(node,value)
 {if(!value)
-{Spry.Debug.reportError("The spry:setrownumber attribute requires a data set name as its value!");node.removeAttribute("spry:setrownumber");return;}
+{Spry.Debug.reportError("The data-spry-setrownumber attribute requires a data set name as its value!");node.removeAttribute("data-spry-setrownumber");return;}
 node.setAttribute("spryrownumber","{"+value+"::ds_RowID}");},attach:function(rgn,node,value)
-{Spry.Data.Region.setRowAttrClickHandler(node,value,"spryrownumber","setCurrentRowNumber");node.removeAttribute("spry:setrownumber");node.removeAttribute("spryrownumber");}};Spry.Data.Region.behaviorAttrs["spry:sort"]={attach:function(rgn,node,value)
+{Spry.Data.Region.setRowAttrClickHandler(node,value,"spryrownumber","setCurrentRowNumber");node.removeAttribute("data-spry-setrownumber");node.removeAttribute("spryrownumber");}};Spry.Data.Region.behaviorAttrs["data-spry-sort"]={attach:function(rgn,node,value)
 {if(!value)
 return;var ds=rgn.getDataSets()[0];var sortOrder="toggle";var colArray=value.split(/\s/);if(colArray.length>1)
 {var specifiedDS=Spry.Data.getDataSetByName(colArray[0]);if(specifiedDS)
@@ -788,7 +788,7 @@ if(colArray.length>1)
 {var str=colArray[colArray.length-1];if(str=="ascending"||str=="descending"||str=="toggle")
 {sortOrder=str;colArray.pop();}}}
 if(ds&&colArray.length>0)
-Spry.Utils.addEventListener(node,"click",function(event){ds.sort(colArray,sortOrder);},false);node.removeAttribute("spry:sort");}};Spry.Data.Region.prototype.attachBehaviors=function()
+Spry.Utils.addEventListener(node,"click",function(event){ds.sort(colArray,sortOrder);},false);node.removeAttribute("data-spry-sort");}};Spry.Data.Region.prototype.attachBehaviors=function()
 {var rgn=this;Spry.Utils.getNodesByFunc(this.regionNode,function(node)
 {if(!node||node.nodeType!=1)
 return false;try
@@ -808,20 +808,20 @@ if(!allDataSetsReady)
 {Spry.Data.Region.notifyObservers("onLoadingData",this);return;}
 this.setState("ready");};Spry.Data.Region.prototype.clearContent=function()
 {this.regionNode.innerHTML="";};Spry.Data.Region.processContentPI=function(inStr)
-{var outStr="";var regexp=/<!--\s*<\/?spry:content\s*[^>]*>\s*-->/mg;var searchStartIndex=0;var processingContentTag=0;while(inStr.length)
+{var outStr="";var regexp=/<!--\s*<\/?data-spry-content\s*[^>]*>\s*-->/mg;var searchStartIndex=0;var processingContentTag=0;while(inStr.length)
 {var results=regexp.exec(inStr);if(!results||!results[0])
 {outStr+=inStr.substr(searchStartIndex,inStr.length-searchStartIndex);break;}
 if(!processingContentTag&&results.index!=searchStartIndex)
 {outStr+=inStr.substr(searchStartIndex,results.index-searchStartIndex);}
 if(results[0].search(/<\//)!=-1)
 {--processingContentTag;if(processingContentTag)
-Spry.Debug.reportError("Nested spry:content regions are not allowed!\n");}
+Spry.Debug.reportError("Nested data-spry-content regions are not allowed!\n");}
 else
 {++processingContentTag;var dataRefStr=results[0].replace(/.*\bdataref="/,"");outStr+=dataRefStr.replace(/".*$/,"");}
 searchStartIndex=regexp.lastIndex;}
 return outStr;};Spry.Data.Region.prototype.tokenizeData=function(dataStr)
 {if(!dataStr)
-return null;var rootToken=new Spry.Data.Region.Token(Spry.Data.Region.Token.LIST_TOKEN,null,null,null);var tokenStack=new Array;var parseStr=Spry.Data.Region.processContentPI(dataStr);tokenStack.push(rootToken);var regexp=/((<!--\s*){0,1}<\/{0,1}spry:[^>]+>(\s*-->){0,1})|((\{|%7[bB])[^\}\s%]+(\}|%7[dD]))/mg;var searchStartIndex=0;while(parseStr.length)
+return null;var rootToken=new Spry.Data.Region.Token(Spry.Data.Region.Token.LIST_TOKEN,null,null,null);var tokenStack=new Array;var parseStr=Spry.Data.Region.processContentPI(dataStr);tokenStack.push(rootToken);var regexp=/((<!--\s*){0,1}<\/{0,1}data-spry-[^>]+>(\s*-->){0,1})|((\{|%7[bB])[^\}\s%]+(\}|%7[dD]))/mg;var searchStartIndex=0;while(parseStr.length)
 {var results=regexp.exec(parseStr);var token=null;if(!results||!results[0])
 {var str=parseStr.substr(searchStartIndex,parseStr.length-searchStartIndex);token=new Spry.Data.Region.Token(Spry.Data.Region.Token.STRING_TOKEN,null,str,str);tokenStack[tokenStack.length-1].addChild(token);break;}
 if(results.index!=searchStartIndex)
@@ -864,7 +864,7 @@ return result;};Spry.Data.Region.prototype.processTokenChildren=function(outputA
 {var children=token.children;var len=children.length;for(var i=0;i<len;i++)
 this.processTokens(outputArr,children[i],processContext);};Spry.Data.Region.prototype.processTokens=function(outputArr,token,processContext)
 {var i=0;switch(token.tokenType)
-{case Spry.Data.Region.Token.LIST_TOKEN:this.processTokenChildren(outputArr,token,processContext);break;case Spry.Data.Region.Token.STRING_TOKEN:outputArr.push(token.data);break;case Spry.Data.Region.Token.PROCESSING_INSTRUCTION_TOKEN:if(token.data.name=="spry:repeat")
+{case Spry.Data.Region.Token.LIST_TOKEN:this.processTokenChildren(outputArr,token,processContext);break;case Spry.Data.Region.Token.STRING_TOKEN:outputArr.push(token.data);break;case Spry.Data.Region.Token.PROCESSING_INSTRUCTION_TOKEN:if(token.data.name=="data-spry-repeat")
 {var dataSet=null;if(token.dataSet)
 dataSet=token.dataSet;else
 dataSet=this.dataSets[0];if(dataSet)
@@ -875,23 +875,23 @@ dsContext.pushState();var dataSetRows=dsContext.getData();var numRows=dataSetRow
 testVal=this.evaluateExpression(token.data.jsExpr,processContext);if(testVal)
 this.processTokenChildren(outputArr,token,processContext);}
 dsContext.popState();}}
-else if(token.data.name=="spry:if")
+else if(token.data.name=="data-spry-if")
 {var testVal=true;if(token.data.jsExpr)
 testVal=this.evaluateExpression(token.data.jsExpr,processContext);if(testVal)
 this.processTokenChildren(outputArr,token,processContext);}
-else if(token.data.name=="spry:choose")
+else if(token.data.name=="data-spry-choose")
 {var defaultChild=null;var childToProcess=null;var testVal=false;var j=0;for(j=0;j<token.children.length;j++)
 {var child=token.children[j];if(child.tokenType==Spry.Data.Region.Token.PROCESSING_INSTRUCTION_TOKEN)
-{if(child.data.name=="spry:when")
+{if(child.data.name=="data-spry-when")
 {if(child.data.jsExpr)
 {testVal=this.evaluateExpression(child.data.jsExpr,processContext);if(testVal)
 {childToProcess=child;break;}}}
-else if(child.data.name=="spry:default")
+else if(child.data.name=="data-spry-default")
 defaultChild=child;}}
 if(!childToProcess&&defaultChild)
 childToProcess=defaultChild;if(childToProcess)
 this.processTokenChildren(outputArr,childToProcess,processContext);}
-else if(token.data.name=="spry:state")
+else if(token.data.name=="data-spry-state")
 {var testVal=true;if(!token.data.regionState||token.data.regionState==this.currentState)
 this.processTokenChildren(outputArr,token,processContext);}
 else
@@ -928,7 +928,7 @@ catch(e){selectAttrStr="";}
 if(!selectAttrStr)
 {Spry.Debug.reportError(piName+" attribute requires a data set name!\n");return"";}
 var testAttrStr="";try
-{var testAttr=ele.attributes.getNamedItem("spry:test");if(testAttr)
+{var testAttr=ele.attributes.getNamedItem("data-spry-test");if(testAttr)
 {if(testAttr.value)
 testAttrStr=" test=\""+Spry.Utils.encodeEntities(testAttr.value)+"\"";ele.attributes.removeNamedItem(testAttr.nodeName);}}
 catch(e){testAttrStr="";}
@@ -942,7 +942,7 @@ if(!dataRefStr)
 {Spry.Debug.reportError(piName+" attribute requires a data reference!\n");return"";}
 return"<"+Spry.Data.Region.PI.instructions[piName].tagName+" dataref=\""+dataRefStr+"\">";};Spry.Data.Region.PI.buildOpenTag=function(ele,piName)
 {return"<"+Spry.Data.Region.PI.instructions[piName].tagName+">";};Spry.Data.Region.PI.buildCloseTag=function(ele,piName)
-{return"</"+Spry.Data.Region.PI.instructions[piName].tagName+">";};Spry.Data.Region.PI.instructions["spry:state"]={tagName:"spry:state",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForState,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:if"]={tagName:"spry:if",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForTest,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:repeat"]={tagName:"spry:repeat",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForRepeat,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:repeatchildren"]={tagName:"spry:repeat",childrenOnly:true,getOpenTag:Spry.Data.Region.PI.buildOpenTagForRepeat,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:choose"]={tagName:"spry:choose",childrenOnly:true,getOpenTag:Spry.Data.Region.PI.buildOpenTag,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:when"]={tagName:"spry:when",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForTest,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:default"]={tagName:"spry:default",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTag,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["spry:content"]={tagName:"spry:content",childrenOnly:true,getOpenTag:Spry.Data.Region.PI.buildOpenTagForContent,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.orderedInstructions=["spry:state","spry:if","spry:repeat","spry:repeatchildren","spry:choose","spry:when","spry:default","spry:content"];Spry.Data.Region.getTokensFromStr=function(str)
+{return"</"+Spry.Data.Region.PI.instructions[piName].tagName+">";};Spry.Data.Region.PI.instructions["data-spry-state"]={tagName:"data-spry-state",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForState,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-if"]={tagName:"data-spry-if",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForTest,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-repeat"]={tagName:"data-spry-repeat",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForRepeat,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-repeatchildren"]={tagName:"data-spry-repeat",childrenOnly:true,getOpenTag:Spry.Data.Region.PI.buildOpenTagForRepeat,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-choose"]={tagName:"data-spry-choose",childrenOnly:true,getOpenTag:Spry.Data.Region.PI.buildOpenTag,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-when"]={tagName:"data-spry-when",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTagForTest,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-default"]={tagName:"data-spry-default",childrenOnly:false,getOpenTag:Spry.Data.Region.PI.buildOpenTag,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.instructions["data-spry-content"]={tagName:"data-spry-content",childrenOnly:true,getOpenTag:Spry.Data.Region.PI.buildOpenTagForContent,getCloseTag:Spry.Data.Region.PI.buildCloseTag};Spry.Data.Region.PI.orderedInstructions=["data-spry-state","data-spry-if","data-spry-repeat","data-spry-repeatchildren","data-spry-choose","data-spry-when","data-spry-default","data-spry-content"];Spry.Data.Region.getTokensFromStr=function(str)
 {if(!str)
 return null;return str.match(/{[^}]+}/g);};Spry.Data.Region.processDataRefString=function(processingContext,regionStr,dataSetsToUse,isJSExpr)
 {if(!regionStr)
